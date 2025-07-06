@@ -12,6 +12,6 @@ mongoose.connect(mongoURI)
 
 server.app.get('/', (req, res) => {
     res.send('Welcome to Secure Editor API');   })
-server.app.post('/api/signin',adduser(req , resizeBy) )
+server.app .post('/api/signin',adduser(req , resizeBy) )
 server.listen();
 

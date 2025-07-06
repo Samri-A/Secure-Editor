@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { pipeline } from '@xenova/transformers';
 import { Box, Typography, Button } from '@mui/material';
 
 let classifier; 

@@ -1,8 +1,11 @@
 import { Editor } from "@monaco-editor/react";
-import {Box } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import {Box , Button } from "@mui/material";
 import LangSwitch from "./LangSwitch";
 import VulnerDetect from "./VulnerDetect";
 import React , {useState , useRef} from "react";
+import FileTreeView from "./FileTreeView";
 import Output from "./Output";  
 const default_value = "//Write your code"
 const default_language = "javascript";
@@ -26,8 +29,29 @@ function EditorWindow() {
   }
   return (
     <Box >
-      <Box>
+      
       <LangSwitch language={language} onSelect={handleLanguageChange} />
+      
+      <Box display="flex"
+      justifyContent="space-between" // or 'flex-start' or 'center'
+      alignItems="center"           // vertical alignment
+      >
+        <Box display="flex"
+      justifyContent="space-between" // or 'flex-start' or 'center'
+      alignItems="center"           // vertical alignment
+      width="30%"
+      >
+        <Button>
+       <AttachFileIcon fontSize="small" />
+       </Button>
+        <Button>
+       <AddIcon fontSize="small" />
+       </Button>
+       <Box>
+        <FileTreeView />
+       </Box>
+
+      </Box>
       <Editor
         height="50vh"
         defaultLanguage={language}

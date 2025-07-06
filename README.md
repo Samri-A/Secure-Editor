@@ -82,7 +82,7 @@ secure-editor/
 4. **Set up environment variables:**
    - Edit `server/.env` with your MongoDB URI and secret.
 
-5. **(Optional) Set up ML backend:**
+5. **Set up ML backend:**
    ```sh
    pip install flask flask-cors torch transformers
    python src/components/app.py

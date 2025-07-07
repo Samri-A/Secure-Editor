@@ -1,4 +1,4 @@
-# Secure Editor
+# Secure Editor -- still on development 
 
 Secure Editor is a browser-based code editor with real-time vulnerability detection, multi-language support, and user authentication. It helps developers write secure code by providing instant feedback on potential vulnerabilities as they type.
 

@@ -1,4 +1,4 @@
-# Secure Editor
+# Secure Editor -- still on development 
 
 Secure Editor is a browser-based code editor with real-time vulnerability detection, multi-language support, and user authentication. It helps developers write secure code by providing instant feedback on potential vulnerabilities as they type.
 
@@ -82,7 +82,7 @@ secure-editor/
 4. **Set up environment variables:**
    - Edit `server/.env` with your MongoDB URI and secret.
 
-5. **(Optional) Set up ML backend:**
+5. **Set up ML backend:**
    ```sh
    pip install flask flask-cors torch transformers
    python src/components/app.py

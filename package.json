@@ -19,6 +19,7 @@
     "axios": "^1.10.0",
     "framer-motion": "^12.23.0",
     "lodash": "^4.17.21",
+    "openai": "^5.8.3",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -26,7 +27,8 @@
     "react-router-dom": "^7.6.3",
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.19",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zustand": "^5.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -51,5 +53,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

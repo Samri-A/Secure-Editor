@@ -1,20 +1,4 @@
-const { languages } = require('monaco-editor');
 const mongoose = require('mongoose');
-const fileSchema = new mongoose.Schema({
-    filename : {
-        type: String,
-        trim: true
-    },
-    content: {
-        type: String,
-        default: ''
-    },
-    language: {
-        type: String,
-        enum: Object.keys(languages),
-        default: 'plaintext'
-    },
-});
 const userSchema = new mongoose.Schema({
     name : {
         type: String,
@@ -31,8 +15,7 @@ const userSchema = new mongoose.Schema({
     password:{
         type: String,
         required: true,
-    },
-    files: [fileSchema],
+    }
 })
 const User = mongoose.model('User', userSchema);
 

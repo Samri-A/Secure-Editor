@@ -1,4 +1,3 @@
-//api.js//
 import { LANG_versions } from "./constants";
 const API_URL = "https://emkc.org/api/v2/piston/execute";
 export const executeCode = async (language, sourceCode) => {

@@ -1,6 +1,6 @@
 import EditorWindow from "./components/EditorWindow";
 import LandingPage from "./components/LandingPage";
-import SignIn from "./components/SignIn";
+import SignIn from "./components/signin";
 import SignUp from "./components/SignUp";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 function App() {

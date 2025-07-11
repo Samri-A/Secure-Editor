@@ -1,51 +1,98 @@
-//Output.jsx//
-import { Box, Button, Typography } from "@mui/material";
-import { useState } from "react";
-import { executeCode } from "./api";
-const Output = ({ editorRef, language }) => {
-  const [output, setOutput] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const runCode = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const sourceCode = editorRef.current.getValue();
-      if (!sourceCode) return;
-      const { run: result } = await executeCode(language, sourceCode);
-      setOutput(result.output);
-    } catch (error) {
-      setError(error);
-      console.error(error);
-    } finally {
-      setIsLoading(false);
+import { Box, Button ,Typography } from "@mui/material";
+import { outputStore } from "./outputStore";
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { useState , useEffect } from "react";
+import { VulnerStore } from "./VulnerStore";
+ 
+
+const Output = ({ setAgent }) => {
+  const output = outputStore((state) => state.output);
+  const VulnerResult = VulnerStore((state) => state.result);
+  const [view, setView] = useState("output");
+  const [fix , setFix] = useState(false);
+  const handleChange = (event, newValue) => {
+    if (newValue !== null) {
+      setView(newValue);
     }
   };
+  useEffect(()=>{
+    setFix(VulnerResult != "Secure code");
+    
+  },[VulnerResult]);
+
+  const handleFix =()=>{
+      setAgent(true);
+  }
   return (
-    <Box w="50%">
-      <Typography mb={2} fontSize="lg">
-        Output
-      </Typography>
-      <Button
-        variant="outline"
-        colorScheme="green"
-        mb={4}
-        isLoading={isLoading}
-        onClick={runCode}
+    <Box
+      sx={{
+        bgcolor: '#1e1e2f',
+        color: '#fff',
+        fontFamily: 'monospace',
+        fontSize: '0.9rem',
+        px: 2,
+        py: 1,
+        height: '25vh',
+        overflowY: 'auto',
+        borderTop: '1px solid #333',
+      }}
+    >
+      <ToggleButtonGroup
+        value={view}
+        exclusive
+        onChange={handleChange}
+        sx={{ mb: 1 }}
       >
-        Run Code
-      </Button>
-      <Box
-        height="75vh"
-        p={2}
-        border="1px solid"
-        borderRadius={4}
-        borderColor="#333"
-        color="#333"
-      >
-        {output}
-      </Box>
+        <ToggleButton
+          value="output"
+          sx={{
+            color: "#fff",
+            '&.Mui-selected': {
+              color: "#fff",
+              backgroundColor: "#333",
+            },
+          }}
+        >
+          Output
+        </ToggleButton>
+        <ToggleButton
+          value="vulnerability"
+          sx={{
+            color: "#fff",
+            '&.Mui-selected': {
+              color: "#fff",
+              backgroundColor: "#333",
+            },
+          }}
+        >
+          Vulnerability
+        </ToggleButton>
+      </ToggleButtonGroup>
+
+      {view === 'output' && (
+        <Typography variant="body2" component="pre" sx={{ whiteSpace: "pre-wrap", color: "#fff" }}>
+          {output || "No output yet."}
+        </Typography>
+      )}
+      {view === 'vulnerability' && (
+        
+        <Typography variant="body2" component="pre" sx={{ whiteSpace: "pre-wrap", color: "#fff" }}>
+          {VulnerResult || "No vulnerabilities detected."}
+          
+     {
+      fix &&(
+          <Button color="primary" onClick={handleFix}>
+               fix 
+            </Button>
+      ) 
+     }
+            
+
+        </Typography>
+        
+      )}
     </Box>
   );
 };
+
 export default Output;

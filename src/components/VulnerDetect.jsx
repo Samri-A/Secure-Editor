@@ -1,47 +1,43 @@
-import React, { useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import BugReportIcon from '@mui/icons-material/BugReport';
+import {getResult} from "./getResult";
+import { VulnerStore } from "./VulnerStore";
+import {Box  , Button , Typography} from "@mui/material";
+import  axios from 'axios';
 
-let classifier; 
-
-async function getResult(code){
-    const response = await fetch("http://localhost:5000/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
-      const data = await response.json();
-      return data;
+async function detect(code){
+  const response = await axios.post("api/classify" ,{ code: code } );
+    return response;
 }
 
-function VulnerDetect({ editorRef }) {
-  const [result, setResult] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const handleClick = async () => {
-    const code = editorRef.current.getValue();
-    setIsLoading(true);
-    const output = await getResult(code);
-    setResult(output);
-    setIsLoading(false);
+const VulnerDetect = ({ editorRef }) => {
+
+  const setOutput = VulnerStore((state)=> state.setResult);
+  const runDetect= async () => {
+    try {
+      const sourceCode = editorRef.current.getValue();
+      if (!sourceCode) return;
+      const result  = await detect(sourceCode);
+      setOutput(result.data.content);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+
   return (
-    <Box>
-      <Button
-        variant="outlined"
-        color="success"
-        onClick={handleClick}
-        disabled={isLoading}
+       <Box>
+       <Button
+
+        onClick={runDetect}
+        startIcon={<BugReportIcon />} 
+        color="primary"
       >
-        {isLoading ? 'Checking...' : 'Check Code Vulnerability'}
+        <Typography variant="body2">Detect</Typography>
+
       </Button>
-
-      {result && (
-        <Typography mt={2} fontSize="14px">
-          {JSON.stringify(result, null, 2)}
-        </Typography>
-      )}
-    </Box>
+       </Box>
+       
   );
-}
-
+};
 export default VulnerDetect;
+

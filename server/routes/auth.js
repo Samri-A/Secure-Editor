@@ -12,7 +12,8 @@ const validateInput = (req, res, next) => {
     next();
 }
 router.post('/login' , [
-    check('email' , 'Email is required').isEmpty() ,
+    check('email', 'Email is required').not().isEmpty(),
+    check('email', 'Invalid email format').isEmail(),
     check('password' , 'Passsword is  requied').not().isEmpty(),
     validateInput
 ], login);

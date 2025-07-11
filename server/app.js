@@ -1,17 +1,19 @@
-import adduser from './controllers/adduser';
 require("dotenv").config();
+const addUserRoute = require("./routes/signup");
+const login = require("./routes/auth");
+const express = require("express");
 const Server = require("./models/server");
+const createfile = require("./routes/createfile");
+const classify = require("./routes/classify");
+const llm_agent = require("./routes/LLm_agent");
 const server = new Server();
-const mongoose = require("mongoose");
-const mongoURI = process.env.MONGO_URI;
-console.log("MONGO_URI from .env:", mongoURI); // Debugging line
 
-mongoose.connect(mongoURI)
-.then(() => console.log('MongoDB connected'))
-.catch((err) => console.error('MongoDB connection error:', err));
+server.app.use(express.json());
+server.app.use('/api' , addUserRoute); 
+server.app.use('/api' , login);
+server.app.use('/api' , createfile);
+server.app.use('/api' , classify);
+server.app.use('/api' , llm_agent);
 
-server.app.get('/', (req, res) => {
-    res.send('Welcome to Secure Editor API');   })
-server.app .post('/api/signin',adduser(req , resizeBy) )
 server.listen();
 

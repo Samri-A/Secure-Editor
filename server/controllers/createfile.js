@@ -7,7 +7,8 @@ const CreateFile = async (req , res)=>{
         await file.save();
         res.status(201).json({ message : 'Saved sucessfully'});
 
-    }catch{
+    }catch(e){
+        console.error(e)
         res.status(400).json({message: 'Error saving a file. Please try again.'});
     }
 }

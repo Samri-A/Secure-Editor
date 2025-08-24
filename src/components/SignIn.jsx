@@ -11,6 +11,7 @@
   import { Link as RouterLink } from 'react-router-dom';
   import axios from 'axios';
   import { useNavigate } from 'react-router-dom';
+  import  {email_store} from './auth_store';
   async function addUser(formdata) {
     const res = await axios.post('/api/login', formdata);
     return res;
@@ -23,7 +24,7 @@
       });
 
       const navigate = useNavigate();
-      
+      const setEmail = email_store((e)=> e.setEmail);
       const handleChange = (e) =>{
         setFormdata({
           ...formdata,
@@ -34,10 +35,11 @@
        try{
       const response = await addUser(formdata);
       setMessage(response.data.message)
+      setEmail(formdata.email)
       navigate('/editor');
-    }catch(error){{
+    }catch(error){
       setMessage(error.response?.data?.message || 'Error signing in. Please try again.');
-    }}
+    }
       }
    
     return (

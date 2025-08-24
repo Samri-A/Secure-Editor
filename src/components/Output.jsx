@@ -26,7 +26,7 @@ const Output = ({ setAgent }) => {
   return (
     <Box
       sx={{
-        bgcolor: '#1e1e2f',
+        bgcolor: '#010111ff',
         color: '#fff',
         fontFamily: 'monospace',
         fontSize: '0.9rem',

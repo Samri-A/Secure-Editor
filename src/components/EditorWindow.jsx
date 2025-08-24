@@ -13,6 +13,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import AttachFile from "./fileupload";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import ChatIcon from "@mui/icons-material/Chat";
 import CloseIcon from "@mui/icons-material/Close";
 import RunCode from "./runcode";
@@ -22,6 +23,7 @@ import Output from "./Output";
 import VulnerDetect from "./VulnerDetect";
 import FileCreate from "./FileCreate";
 import excuteAgent from './LLM_usage';
+import { color } from "framer-motion";
 const default_value = "# Write your code";
 const default_language = "python";
 
@@ -29,6 +31,7 @@ function EditorWindow() {
   const editorRef = useRef(null);
   const [theme, setTheme] = useState("vs-dark");
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [filevisible , setFileVisible] = useState(false)
   const [chatVisible, setChatVisible] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
@@ -42,17 +45,29 @@ function EditorWindow() {
       language: default_language,
     },
   ]);
-
   const [currentFileId, setCurrentFileId] = useState("file-1");
   const currentFile = files.find((file) => file.id === currentFileId);
-
+ 
   useEffect(() => {
     if (!currentFile) return;
     editorRef.current?.setValue(currentFile.content);
   }, [currentFileId]);
+
+  const get_code_with_line = async ()=>{
+    const editor = editorRef.current()
+    if( !editor) return
+    const model = editor.getModel;
+    const code = model.getValue;
+    const language = model.getLanguageId;
+
+  }
+
   useEffect(() => {
   const prompt = "Refactor this code\n";
+  
+  
   const runAgent = async () => {
+
     if (agent && currentFile) {
       try {
         const result = await excuteAgent(currentFile.content, prompt);
@@ -108,6 +123,10 @@ function EditorWindow() {
     setChatVisible((prev) => !prev);
   };
 
+  const toggleExplorer = ()=>{
+    setFileVisible((prev)=> !prev);
+  }
+
   const handleSendMessage = () => {
     if (chatInput.trim()) {
       setChatMessages((prev) => [
@@ -120,22 +139,118 @@ function EditorWindow() {
   };
 
   return (
-    <Box display="flex" height="100vh" bgcolor={isDarkMode ? "#1e1e2f" : "#f5f5f5"}>
+    <>
+    <Box display='flex' alignItems={"center"} p={1} bgcolor={ isDarkMode ? "black" : "white"}>
+      <Typography sx={{
+        fontFamily : "sans-serif",
+        fontWeight: "Bold", 
+        paddingLeft: "50px !important",
+
+      }} color={isDarkMode ? "white" : "black"}>Secure Editor</Typography>
+      <Box sx={{ marginLeft: 'auto' }}>
+        
+           <Button
+              startIcon={isDarkMode ? <LightModeIcon 
+              sx={
+            {
+              fontSize: '25px !important'
+            }
+          }/> : <DarkModeIcon sx={
+            {
+              fontSize: '25px !important'
+            }
+          }/>}
+              onClick={handleThemeToggle}
+              sx={
+            {
+              
+              color:"gray"
+            }
+          }
+            >
+            </Button>        
+         </Box>
+      
+      
+      </Box>
+    <Box display="flex" height="100vh" bgcolor={isDarkMode ? "#00000fff" : "#f5f5f5"} >
+        
       <Box
-        width="18%"
+        width="4%"
         bgcolor={isDarkMode ? "#444" : "#ddd"}
         color={isDarkMode ? "#DCDCDC" : "#333"}
         display="flex"
         flexDirection="column"
-        p={1}
-      >
+        p={0}
+      >  <RunCode editorRef={editorRef} language={currentFile?.language} />
+         <VulnerDetect editorRef={editorRef} />
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="body2">File Explorer</Typography>
+        </Box>
+         <FileCreate
+              name={currentFile?.name}
+              language={currentFile?.language}
+              content={currentFile?.content}
+            />
+            
+       
+            
+
+          <Button
+
+           onClick={toggleExplorer}
+           sx={
+            {
+              
+              color:"gray"
+            }
+          }
+          startIcon={<FileCopyIcon sx={
+            {
+              fontSize: '35px !important'
+            }
+          }/>}></Button>
+
+          <Button
+              variant={chatVisible ? "contained" : "outlined"}
+              color="primary"
+              startIcon={<ChatIcon  sx={{
+              fontSize: '35px !important'
+            }}/>}
+              onClick={toggleChat}
+              sx={
+            {
+              
+              color:"gray"
+            }
+          }
+            >
+              
+            </Button>
+     
+             
+        
+      </Box>
+        
+
+       {   filevisible &&
+        <Box
+        width="15%"
+        minWidth="200px"
+        bgcolor={isDarkMode ? "#444" : "#ddd"}
+        color={isDarkMode ? "#DCDCDC" : "#333"}
+        borderColor={"gray"}
+        borderLeft={0.5}
+        display="flex"
+        flexDirection="column"
+        p={1}
+        boxShadow={-2}
+        height="100%"
+        >
+
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+         
           <Box>
-            <IconButton size="small">
-              <AttachFileIcon/>
-            </IconButton>
-            <IconButton size="small" onClick={handleAddFile}>
+            <IconButton size="small" onClick={handleAddFile} sx={{color:"gray"}}>
               <AddIcon fontSize="small" />
             </IconButton>
           </Box>
@@ -146,47 +261,11 @@ function EditorWindow() {
           setFiles={setFiles}
           onFileSelect={(file) => setCurrentFileId(file.id)}
         />
-      </Box>
-
+      </Box>}
       
       <Box flexGrow={1} display="flex" flexDirection="column">
         
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          bgcolor={isDarkMode ? "#444" : "#ddd"}
-          px={2}
-          py={1}
-        >
-          <Box display="flex" gap={1} alignItems="center">
-            <RunCode editorRef={editorRef} language={currentFile?.language} />
-            <VulnerDetect editorRef={editorRef} />
-            <Button
-              startIcon={isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
-              onClick={handleThemeToggle}
-              size="small"
-            >
-            </Button>
-          </Box>
-
-          <Box display="flex" alignItems="center" gap={1}>
-            <FileCreate
-              name={currentFile?.name}
-              language={currentFile?.language}
-              content={currentFile?.content}
-            />
-            <Button
-              variant={chatVisible ? "contained" : "outlined"}
-              color="primary"
-              startIcon={<ChatIcon />}
-              onClick={toggleChat}
-              size="small"
-            >
-              Chat
-            </Button>
-          </Box>
-        </Box>
+        
 
       
         <Box flexGrow={1} position="relative">
@@ -255,7 +334,7 @@ function EditorWindow() {
         <Paper
           square
           sx={{
-            bgcolor: isDarkMode ? "#1e1e2f" : "#eee",
+            bgcolor: isDarkMode ? "#020213ff" : "#eee",
             color: isDarkMode ? "#fff" : "#333",
             p: 1,
           }}
@@ -263,7 +342,11 @@ function EditorWindow() {
           <Output setAgent={setAgent} />
         </Paper>
       </Box>
-    </Box>
+     
+       
+          </Box>
+    </>
+    
   );
 }
 

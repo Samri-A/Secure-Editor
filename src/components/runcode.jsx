@@ -28,10 +28,18 @@ const RunCode = ({ editorRef, language }) => {
   return (
        <Box>
        <Button
+        sx={{
+         
+        }}
         isLoading={isLoading}
         onClick={runCode}
-        startIcon={<PlayArrowIcon />} 
-        color="primary"
+        startIcon={<PlayArrowIcon
+         sx={{
+          color :"gray",
+          fontSize : '35px !important'
+         }}
+        />} 
+        
       >
 
       </Button>

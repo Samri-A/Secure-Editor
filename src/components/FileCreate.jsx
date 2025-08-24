@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Button } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-
+import {email_store} from './auth_store';
 
 async function addFile(filedataa) {
     const res = await axios.post('/api/createfile', filedataa);
@@ -11,12 +11,14 @@ async function addFile(filedataa) {
   }
 
 
-const FileCreate = (name , language , content )=> {
+const FileCreate = ({name , language , content })=> {
+    const email = email_store((e)=> e.email)
     const file = {
-            /*email : {email},*/
-            filename: {name},
-            language: {language},
-            content: {content}
+            email,
+            filename: name,
+            content,
+            language
+           
         };
         const [status , setStatus] = useState(false);
 
@@ -29,9 +31,18 @@ const FileCreate = (name , language , content )=> {
         }}
 
   return (
-    <Button onClick={handleSaving} startIcon={<SaveIcon/>}>
-      {status ? <FiberManualRecordIcon fontSize="small" color="secondary" /> : <FiberManualRecordIcon fontSize="small" color="error" />}
-    </Button>
+    <Button sx={
+            {
+              
+              color:"gray"
+            }
+          } onClick={handleSaving} startIcon={<SaveIcon sx={
+            {
+              fontSize: '35px !important'
+            }
+          }/>}>
+      {/*status ? <FiberManualRecordIcon fontSize="small" color="secondary" /> : <FiberManualRecordIcon fontSize="small" color="error" />*/}
+    </Button >
   );
 }
 

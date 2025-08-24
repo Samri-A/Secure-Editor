@@ -17,7 +17,7 @@ const VulnerDetect = ({ editorRef }) => {
       const sourceCode = editorRef.current.getValue();
       if (!sourceCode) return;
       const result  = await detect(sourceCode);
-      setOutput(result.data.content);
+      setOutput(result.data.content.code);
     } catch (error) {
       console.error(error);
     }
@@ -29,10 +29,21 @@ const VulnerDetect = ({ editorRef }) => {
        <Button
 
         onClick={runDetect}
-        startIcon={<BugReportIcon />} 
-        color="primary"
+        startIcon={<BugReportIcon
+          sx={
+            {
+              fontSize: '35px !important'
+            }
+          }
+          />} 
+        sx={
+          {
+            color:"gray"
+          }
+        }
+       
       >
-        <Typography variant="body2">Detect</Typography>
+        <Typography variant="body2"></Typography>
 
       </Button>
        </Box>
